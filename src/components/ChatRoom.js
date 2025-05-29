@@ -1,9 +1,9 @@
 // src/components/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import './ChatRoom.css';
-import { getMessagesByConversationId } from '../apiClients/messages';
+import { getMessagesByConversationId, sendMessage as sendMessageApi } from '../apiClients/messages';
 
-function ChatRoom({ roomId, userId }) {
+function ChatRoom({ roomId, userId, userName }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
@@ -20,20 +20,28 @@ function ChatRoom({ roomId, userId }) {
     fetchMessages();
   }, [roomId]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
+
     const newMessage = {
+      conversationId: roomId,
       senderId: userId,
-      senderName: 'You',
+      senderName: userName,
       content: input
     };
-    setMessages((prev) => [...prev, newMessage]);
-    setInput('');
+
+    try {
+      await sendMessageApi(newMessage);
+      setMessages((prev) => [...prev, { ...newMessage, senderName: 'You' }]);
+      setInput('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   return (
     <div className="chatroom-container">
-      <h2>Conversation ID: {roomId}</h2>
+      <h2>{userName}</h2>
       <div className="messages">
         {messages.map((msg, index) => (
           <div key={index} className="message">
