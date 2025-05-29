@@ -28,9 +28,10 @@ function ConversationList({ onSelectRoom }) {
       <h2>Your Conversations</h2>
       <ul className="conversation-list">
         {conversations.map((conv) => (
-          <li key={conv.id} onClick={() => handleClick(conv.userId)}>
+          <li key={conv.id} onClick={() => handleClick(conv.id)}>
             {conv.userName}
           </li>
+
         ))}
       </ul>
     </div>

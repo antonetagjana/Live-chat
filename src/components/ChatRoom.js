@@ -1,33 +1,30 @@
 // src/components/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import './ChatRoom.css';
+import { getMessagesByConversationId } from '../apiClients/messages';
 
-function ChatRoom({ roomId }) {
+function ChatRoom({ roomId, userId }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  
-  const users = {
-    '1': 'Alice',
-    '2': 'Bob',
-    '3': 'Charlie'
-  };
-
-  const recipientName = users[roomId] || 'Unknown User';
-
-  
   useEffect(() => {
-    const dummyMessages = [
-      { sender: recipientName, content: 'Hello!' },
-      { sender: 'You', content: 'Hi there!' }
-    ];
-    setMessages(dummyMessages);
+    const fetchMessages = async () => {
+      try {
+        const data = await getMessagesByConversationId(roomId);
+        setMessages(data);
+      } catch (error) {
+        console.error('Failed to fetch messages:', error);
+      }
+    };
+
+    fetchMessages();
   }, [roomId]);
 
   const sendMessage = () => {
     if (!input.trim()) return;
     const newMessage = {
-      sender: 'You',
+      senderId: userId,
+      senderName: 'You',
       content: input
     };
     setMessages((prev) => [...prev, newMessage]);
@@ -36,11 +33,11 @@ function ChatRoom({ roomId }) {
 
   return (
     <div className="chatroom-container">
-      <h2>Chat with {recipientName}</h2>
+      <h2>Conversation ID: {roomId}</h2>
       <div className="messages">
         {messages.map((msg, index) => (
           <div key={index} className="message">
-            <strong>{msg.sender}:</strong> {msg.content}
+            <strong>{msg.senderId === userId ? 'You' : msg.senderName}:</strong> {msg.content}
           </div>
         ))}
       </div>

@@ -5,6 +5,7 @@ import './Messenger.css';
 
 const Messenger = () => {
   const [activeRoomId, setActiveRoomId] = useState(null);
+  const userId = '1'; // Replace with actual logged-in user ID
 
   return (
     <div className="messenger-container">
@@ -13,7 +14,7 @@ const Messenger = () => {
       </div>
       <div className="chat-area">
         {activeRoomId ? (
-          <ChatRoom roomId={activeRoomId} />
+          <ChatRoom roomId={activeRoomId} userId={userId} />
         ) : (
           <div className="no-chat">Select a conversation to start chatting</div>
         )}
