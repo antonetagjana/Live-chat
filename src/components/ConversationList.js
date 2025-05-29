@@ -1,18 +1,22 @@
 // src/components/ConversationList.js
 import React, { useEffect, useState } from 'react';
 import './ConversationList.css';
+import { getConversations } from '../apiClients/convesation';
 
 function ConversationList({ onSelectRoom }) {
   const [conversations, setConversations] = useState([]);
 
-  
   useEffect(() => {
-    const dummyData = [
-      { id: '1', name: 'Alice' },
-      { id: '2', name: 'Bob' },
-      { id: '3', name: 'Charlie' }
-    ];
-    setConversations(dummyData);
+    const fetchConversations = async () => {
+      try {
+        const data = await getConversations();
+        setConversations(data);
+      } catch (error) {
+        console.error('Failed to fetch conversations:', error);
+      }
+    };
+
+    fetchConversations();
   }, []);
 
   const handleClick = (userId) => {
@@ -24,8 +28,8 @@ function ConversationList({ onSelectRoom }) {
       <h2>Your Conversations</h2>
       <ul className="conversation-list">
         {conversations.map((conv) => (
-          <li key={conv.id} onClick={() => handleClick(conv.id)}>
-            {conv.name}
+          <li key={conv.id} onClick={() => handleClick(conv.userId)}>
+            {conv.userName}
           </li>
         ))}
       </ul>
