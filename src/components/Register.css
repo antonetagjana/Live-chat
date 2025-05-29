@@ -1,0 +1,70 @@
+/* RegisterPage.css */
+
+/* Container for the entire page */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+}
+
+/* Content box for the form */
+.register-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Title of the page */
+.register-content h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Style for the form inputs */
+.register-content input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Style for the submit button */
+.register-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.register-button:hover {
+  background-color: #45a049;
+}
+
+/* Optional: a little style for the link back to login */
+.register-content p {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.register-content p a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.register-content p a:hover {
+  text-decoration: underline;
+}

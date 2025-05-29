@@ -1,0 +1,22 @@
+/* src/components/Messenger.css */
+.messenger-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 30%;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.chat-area {
+  width: 70%;
+  padding: 20px;
+}
+
+.no-chat {
+  text-align: center;
+  margin-top: 100px;
+  color: gray;
+}
