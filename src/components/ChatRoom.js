@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import './ChatRoom.css';
 import { getMessagesByConversationId, sendMessage as sendMessageApi } from '../apiClients/messages';
+import useMqtt from '../hooks/usemqtt';
 
 function ChatRoom({ roomId, userId, userName }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+
+  useMqtt(roomId);
 
   useEffect(() => {
     const fetchMessages = async () => {

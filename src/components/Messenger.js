@@ -5,7 +5,8 @@ import './Messenger.css';
 
 const Messenger = () => {
   const [activeRoomId, setActiveRoomId] = useState(null);
-  const userId = '1'; // Replace with actual logged-in user ID
+  const userId = '2'; // Replace with actual logged-in user ID
+  
 
   return (
     <div className="messenger-container">
