@@ -1,16 +1,26 @@
-// src/components/Login.js
-
 import React, { useState } from 'react';
 import './Login.css'; 
+import { useUser } from '../context/userContext';
+import login from '../apiClients/login';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const { setUser } = useUser(); // get setUser from context
 
-  const loginUser = (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
-    localStorage.setItem('token', 'fake-jwt-token');
-    window.location.href = '/messenger';
+
+    try {
+      const userData = await login(username, password);
+      setUser(userData); // Set globally
+      setError(null);
+      window.location.href = '/messenger';
+    } catch (err) {
+      setError('Login failed. Please check your credentials.');
+      console.error(err);
+    }
   };
 
   return (
@@ -20,7 +30,7 @@ function Login() {
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
+          placeholder="Email"
           className="input-field"
         />
         <input
@@ -32,6 +42,8 @@ function Login() {
         />
         <button type="submit" className="login-btn">Login</button>
       </form>
+
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import ConversationList from './ConversationList';
 import ChatRoom from './ChatRoom';
 import './Messenger.css';
+import { useUser } from '../context/userContext';
 
 const Messenger = () => {
+
+    const { user } = useUser();
+    console.log("User data",user)
+
   const [activeRoomId, setActiveRoomId] = useState(null);
-  const userId = '2'; // Replace with actual logged-in user ID
+  const userId = "3"; // Replace with actual logged-in user ID
   
 
   return (
