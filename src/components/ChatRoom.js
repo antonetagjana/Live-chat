@@ -1,4 +1,3 @@
-// src/components/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import './ChatRoom.css';
 import { getMessagesByConversationId, sendMessage as sendMessageApi } from '../apiClients/messages';
@@ -7,9 +6,9 @@ import useMqtt from '../hooks/usemqtt';
 function ChatRoom({ roomId, userId, userName }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const { messages: mqttMessages } = useMqtt(roomId);
 
-  useMqtt(roomId);
-
+  // Fetch historical messages once
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -23,10 +22,22 @@ function ChatRoom({ roomId, userId, userName }) {
     fetchMessages();
   }, [roomId]);
 
+  // Handle incoming MQTT messages
+  useEffect(() => {
+    mqttMessages.forEach((incoming) => {
+      setMessages((prevMessages) => {
+        const exists = prevMessages.some((msg) => msg.id === incoming.id);
+        if (exists) return prevMessages;
+        return [...prevMessages, incoming];
+      });
+    });
+  }, [mqttMessages]);
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const newMessage = {
+      id: `temp-${Date.now()}`, // temporary ID to avoid duplication
       conversationId: roomId,
       senderId: userId,
       senderName: userName,
@@ -47,7 +58,7 @@ function ChatRoom({ roomId, userId, userName }) {
       <h2>{userName}</h2>
       <div className="messages">
         {messages.map((msg, index) => (
-          <div key={index} className="message">
+          <div key={msg.id || index} className="message">
             <strong>{msg.senderId === userId ? 'You' : msg.senderName}:</strong> {msg.content}
           </div>
         ))}
