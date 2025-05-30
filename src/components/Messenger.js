@@ -11,7 +11,7 @@ const Messenger = () => {
   return (
     <div className="messenger-container">
       <div className="sidebar">
-        <ConversationList onSelectRoom={setActiveRoomId} />
+        <ConversationList currentUserId="2" onSelectRoom={setActiveRoomId} />
       </div>
       <div className="chat-area">
         {activeRoomId ? (
