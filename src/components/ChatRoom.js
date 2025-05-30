@@ -1,46 +1,63 @@
-// src/components/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import './ChatRoom.css';
 
 function ChatRoom({ roomId }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-
   
-  const users = {
-    '1': 'Alice',
-    '2': 'Bob',
-    '3': 'Charlie'
-  };
-
-  const recipientName = users[roomId] || 'Unknown User';
-
   
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  const BASE_URL = "https://0fbf-46-183-121-56.ngrok-free.app";
+
   useEffect(() => {
-    const dummyMessages = [
-      { sender: recipientName, content: 'Hello!' },
-      { sender: 'You', content: 'Hi there!' }
-    ];
-    setMessages(dummyMessages);
+    const fetchMessages = async () => {
+      try {
+        
+        const response = await fetch(`${BASE_URL}/conversations/${roomId}/messages`);
+        const data = await response.json();
+        setMessages(data);
+      } catch (err) {
+        console.error('Failed to load messages', err);
+      }
+    };
+
+    if (roomId) fetchMessages();
   }, [roomId]);
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    const newMessage = {
-      sender: 'You',
-      content: input
+  const sendMessage = async () => {
+    if (!input.trim() || !user) return;
+
+    const message = {
+      conversationId: roomId,
+      senderId: user.id,          
+      senderName: user.firstName, 
+      content: input,
+      timestamp: new Date().toISOString()
     };
-    setMessages((prev) => [...prev, newMessage]);
-    setInput('');
+
+    try {
+      const response = await fetch(`${BASE_URL}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(message)
+      });
+
+      const savedMessage = await response.json();
+      setMessages((prev) => [...prev, savedMessage]);
+      setInput('');
+    } catch (err) {
+      console.error('Failed to send message', err);
+    }
   };
 
   return (
     <div className="chatroom-container">
-      <h2>Chat with {recipientName}</h2>
+      <h2>Chat Room</h2>
       <div className="messages">
         {messages.map((msg, index) => (
           <div key={index} className="message">
-            <strong>{msg.sender}:</strong> {msg.content}
+            <strong>{msg.senderName || 'You'}:</strong> {msg.content}
           </div>
         ))}
       </div>

@@ -1,6 +1,7 @@
 // src/components/RegisterPage.js
 import React, { useState } from 'react';
-import './Register.css';  // Import the CSS for styling
+import './Register.css'; 
+import axios from 'axios'; 
 
 function Register() {
   const [user, setUser] = useState({
@@ -16,13 +17,25 @@ function Register() {
     setUser({ ...user, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate the registration process (you can replace this with an API call)
-    console.log(user);
-    alert('User registered successfully!');
-    // Redirect to home page after successful registration
-    window.location.href = '/';  // Redirect to HomePage
+    try {
+      const response = await axios.post(
+        'https://0fbf-46-183-121-56.ngrok-free.app/register',
+        user,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log('Register response:', response.data);
+      alert('User registered successfully!');
+      window.location.href = '/'; // Redirect to home
+    } catch (error) {
+      console.error('Registration failed:', error.response?.data || error.message);
+      alert('Registration failed. Kontrollo të dhënat.');
+    }
   };
 
   return (

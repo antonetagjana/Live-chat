@@ -10,14 +10,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Faqja kryesore */}
+        {}
         <Route path="/" element={<HomePage />} />
 
-        {/* Login dhe regjistrim */}
+        {}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Messenger që përmban ConversationList + ChatRoom në një faqe */}
+        {}
         <Route path="/messenger" element={<Messenger />} />
       </Routes>
     </Router>

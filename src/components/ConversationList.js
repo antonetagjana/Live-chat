@@ -1,33 +1,24 @@
-// src/components/ConversationList.js
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './ConversationList.css';
 
-function ConversationList({ onSelectRoom }) {
-  const [conversations, setConversations] = useState([]);
-
-  
-  useEffect(() => {
-    const dummyData = [
-      { id: '1', name: 'Alice' },
-      { id: '2', name: 'Bob' },
-      { id: '3', name: 'Charlie' }
-    ];
-    setConversations(dummyData);
-  }, []);
-
-  const handleClick = (userId) => {
-    onSelectRoom(userId); 
+function ConversationList({ conversations, onSelectRoom }) {
+  const handleClick = (conversationId) => {
+    onSelectRoom(conversationId);
   };
 
   return (
     <div className="conversation-container">
       <h2>Your Conversations</h2>
       <ul className="conversation-list">
-        {conversations.map((conv) => (
-          <li key={conv.id} onClick={() => handleClick(conv.id)}>
-            {conv.name}
-          </li>
-        ))}
+        {conversations && conversations.length > 0 ? (
+          conversations.map((conv) => (
+            <li key={conv._id} onClick={() => handleClick(conv._id)}>
+              {conv.participants?.map(p => p.username).join(', ')}
+            </li>
+          ))
+        ) : (
+          <li>No conversations available</li>
+        )}
       </ul>
     </div>
   );
