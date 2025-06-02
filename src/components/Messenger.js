@@ -10,13 +10,14 @@ const Messenger = () => {
     console.log("User data",user)
 
   const [activeRoomId, setActiveRoomId] = useState(null);
-  const userId = "3"; // Replace with actual logged-in user ID
-  
+  const userId =  localStorage.getItem('userId'); // Replace with actual logged-in user ID
+  //const storedUserId = localStorage.getItem('userId');
+
 
   return (
     <div className="messenger-container">
       <div className="sidebar">
-        <ConversationList currentUserId="2" onSelectRoom={setActiveRoomId} />
+        <ConversationList currentUserId= {userId} onSelectRoom={setActiveRoomId} />
       </div>
       <div className="chat-area">
         {activeRoomId ? (
